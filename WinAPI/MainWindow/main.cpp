@@ -1,4 +1,5 @@
-#include<Windows.h>
+Ôªø#include<Windows.h>
+#include"resource.h"
 
 CONST CHAR g_sz_MY_WINDOW_CLASS[] = "MyFirstWindow";
 
@@ -6,67 +7,77 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
-    //1) –Â„ËÒÚ‡ˆËˇ ÍÎ‡ÒÒ‡ ÓÍÌ‡:
+    //1) –†–µ–≥–∏—Å—Ç—Ä–∞—Ü–∏—è –∫–ª–∞—Å—Å–∞ –æ–∫–Ω–∞:
     WNDCLASSEX wc;
     ZeroMemory(&wc, sizeof(wc));
 
-    //–‡ÁÏÂ ÍÎ‡ÒÒ‡ ‚ ¡‡ÈÚ‡ı (cb - Count Bytes)
+    //–†–∞–∑–º–µ—Ä –∫–ª–∞—Å—Å–∞ –≤ –ë–∞–π—Ç–∞—Ö (cb - Count Bytes)
     wc.cbSize = sizeof(wc);
 
-    //Class Extra Bytes ƒÓÔ. ¡‡ÈÚ˚ ÍÎ‡ÒÒ˚
+    //Class Extra Bytes –î–æ–ø. –ë–∞–π—Ç—ã –∫–ª–∞—Å—Å—ã
     wc.cbClsExtra = 0;
 
-    //Window Extra Bytes ƒÓÔ. ¡‡ÈÚ˚ ÓÍÌ‡
+    //Window Extra Bytes –î–æ–ø. –ë–∞–π—Ç—ã –æ–∫–Ω–∞
     wc.cbWndExtra = 0; 
 
-    // —ÚËÎ¸
+    // –°—Ç–∏–ª—å
     wc.style = 0;
 
 
-    wc.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
-    wc.hIconSm = LoadIcon(hInstance, IDI_APPLICATION);
-    wc.hCursor = LoadIcon(hInstance, IDC_ARROW);
+    //wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_PALM));
+    //wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_STAR));
+    wc.hIcon =   (HICON)LoadImage(hInstance, "palm.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+    wc.hIconSm = (HICON)LoadImage(hInstance, "star.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+
+
+    wc.hCursor = (HCURSOR)LoadImage(hInstance, "sccpointer.ani", IMAGE_CURSOR, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
     wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
 
 
     wc.hInstance = hInstance;
-    wc.lpfnWndProc = (WNDPROC)WndProc; //TODO: ”Í‡Á‡Ú¸ ÔÓˆÂ‰ÛÛ ÓÍÌ‡
+    wc.lpfnWndProc = (WNDPROC)WndProc; //TODO: –£–∫–∞–∑–∞—Ç—å –ø—Ä–æ—Ü–µ–¥—É—Ä—É –æ–∫–Ω–∞
     wc.lpszMenuName = NULL;
     wc.lpszClassName = g_sz_MY_WINDOW_CLASS;
 
 
     if (!RegisterClassEx(&wc))
     {
-        MessageBox(NULL, " Î‡ÒÒ ÌÂ Á‡Â„ËÒÚËÓ‚‡Ì", "Error", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, "–ö–ª–∞—Å—Å –Ω–µ –∑–∞—Ä–µ–≥–∏—Å—Ç—Ä–∏—Ä–æ–≤–∞–Ω", "Error", MB_OK | MB_ICONERROR);
         return 0;
     }
 
-    //2) —ÓÁ‰‡ÌËÂ ÓÍÌ‡:
+    //2) –°–æ–∑–¥–∞–Ω–∏–µ –æ–∫–Ω–∞:
     
     HWND hwnd = CreateWindowEx(
         0,
-        g_sz_MY_WINDOW_CLASS,   //»Ïˇ ÍÎ‡ÒÒ‡ ÓÍÌ‡
-        g_sz_MY_WINDOW_CLASS,   //«‡„ÓÎÓ‚ÓÍ ÓÍÌ‡
-        WS_OVERLAPPEDWINDOW, //—ÚËÎ¸ ÓÍÌ‡ ‰Îˇ „Î‡‚ÌÓ„Ó ÓÍÌ‡ ÔÓ„‡ÏÏ˚ ‚ÒÂ„‰‡ ·Û‰ÂÚ WS_OVERLAPPEDWINDOW - ˝ÚÓ ÓÍÌÓ ‚ÂıÌÂ„Ó ÛÓ‚Ìˇ(TOP_LEVEL_WINDOW), ÍÓÚÓÓÂ ‚ÍÎ˛˜‡ÂÚ ‚ ÒÂ·ˇ ‰Ó˜ÂÌËÈ ....
-        CW_USEDEFAULT,CW_USEDEFAULT, //Õ‡˜‡Î¸Ì‡ˇ ÔÓÁËˆˆËˇ ÓÍÌ‡
-        CW_USEDEFAULT,CW_USEDEFAULT, //–‡ÁÏÂ ÓÍÌ‡
+        g_sz_MY_WINDOW_CLASS,   //–ò–º—è –∫–ª–∞—Å—Å–∞ –æ–∫–Ω–∞
+        g_sz_MY_WINDOW_CLASS,   //–ó–∞–≥–æ–ª–æ–≤–æ–∫ –æ–∫–Ω–∞
+        WS_OVERLAPPEDWINDOW, //–°—Ç–∏–ª—å –æ–∫–Ω–∞ –¥–ª—è –≥–ª–∞–≤–Ω–æ–≥–æ –æ–∫–Ω–∞ –ø—Ä–æ–≥—Ä–∞–º–º—ã –≤—Å–µ–≥–¥–∞ –±—É–¥–µ—Ç WS_OVERLAPPEDWINDOW - —ç—Ç–æ –æ–∫–Ω–æ –≤–µ—Ä—Ö–Ω–µ–≥–æ —É—Ä–æ–≤–Ω—è(TOP_LEVEL_WINDOW), –∫–æ—Ç–æ—Ä–æ–µ –≤–∫–ª—é—á–∞–µ—Ç –≤ —Å–µ–±—è –¥–æ—á–µ—Ä–Ω–∏–π ....
+        CW_USEDEFAULT,CW_USEDEFAULT, //–ù–∞—á–∞–ª—å–Ω–∞—è –ø–æ–∑–∏—Ü—Ü–∏—è –æ–∫–Ω–∞
+        CW_USEDEFAULT,CW_USEDEFAULT, //–†–∞–∑–º–µ—Ä –æ–∫–Ω–∞
         NULL, //Parent Window
-        NULL, //ƒÎˇ „Î‡‚ÌÓ„Ó ÓÍÌ‡ ˝ÚÓ ÏÂÌ˛. ƒÎˇ ‰Ó˜ÂÌÂ„Ó ÓÍÌ‡ ˝ÚÓ ID Â„Ó ÂÒÛÒ‡ (IDC_EDIT)
+        NULL, //–î–ª—è –≥–ª–∞–≤–Ω–æ–≥–æ –æ–∫–Ω–∞ —ç—Ç–æ –º–µ–Ω—é. –î–ª—è –¥–æ—á–µ—Ä–Ω–µ–≥–æ –æ–∫–Ω–∞ —ç—Ç–æ ID –µ–≥–æ —Ä–µ—Å—É—Ä—Å–∞ (IDC_EDIT)
         hInstance,
         NULL);
     
     if (hwnd == 0)
     {
-        MessageBox(NULL, "ŒÍÌÓ ÌÂ ·˚ÎÓ ÒÓÁ‰‡ÌÌÓ", "Error", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, "–û–∫–Ω–æ –Ω–µ –±—ã–ª–æ —Å–æ–∑–¥–∞–Ω–Ω–æ", "Error", MB_OK | MB_ICONERROR);
         return 0;
     }
-    //3) «‡ÔÛÒÍ ˆËÍÎ‡ ÒÓÓ·˘ÂÌËÈ:
+
+    ShowWindow(hwnd, nCmdShow); // –ó–∞–¥–∞–µ—Ç —Ä–µ–∂–∏–º –æ—Ç–æ–±—Ä–æ–∂–µ–Ω–∏—è –æ–∫–Ω–∞
+    UpdateWindow(hwnd); // –í—ã–ø–æ–ª–Ω—è–µ—Ç –ø—Ä–æ—Ä–∏—Å–æ–≤–∫—É –æ–∫–Ω–∞
+
+
+
+    //3) –ó–∞–ø—É—Å–∫ —Ü–∏–∫–ª–∞ —Å–æ–æ–±—â–µ–Ω–∏–π:
 
     MSG msg;
     while (GetMessage(&msg, NULL, 0 , 0) > 0)
     {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        TranslateMessage(&msg); // –¢—Ä–∞–Ω—Å–ª–∏—Ä—É–µ—Ç —Å–æ–æ–±—â–µ–Ω–∏—è –≤–∏—Ä—Ç—É–∞–ª—å–Ω—ã—Ö –∫–ª–∞–≤–∏—â –≤ —Å–∏–º–≤–æ–ª—å–Ω—ã–µ —Å–æ–æ–±—â–µ–Ω–∏—è
+        DispatchMessage(&msg); // –û—Ç–ø—Ä–∞–≤–ª—è–µ—Ç —Å–æ–æ–±—â–µ–Ω–∏–µ –ø—Ä–æ—Ü–µ–¥—É—Ä–µ –æ–∫–Ω–∞. –°–æ–æ–±—â–µ–Ω–∏–µ –±–µ—Ä–µ—Ç –æ—Ç GetMessage();
     }
 
     return msg.wParam;
@@ -81,7 +92,11 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
         break;
     case WM_DESTROY: PostQuitMessage(0); break;
-    case WM_CLOSE: DestroyWindow(hwnd); break;
+    case WM_CLOSE: 
+        if(MessageBox(hwnd, "–í—ã –¥–µ–π—Å—Ç–≤–∏—Ç–µ–ª—å–Ω–æ —Ö–æ—Ç–∏—Ç–µ –∑–∞–∫—Ä—ã—Ç—å –æ–∫–Ω–æ?", "Question", MB_YESNO | MB_ICONQUESTION) == IDYES)
+            DestroyWindow(hwnd); 
+        
+        break;
     default: return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 

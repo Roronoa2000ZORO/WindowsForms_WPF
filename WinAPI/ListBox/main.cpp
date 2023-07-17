@@ -42,6 +42,7 @@ BOOL CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         HWND hListBox = GetDlgItem(hwnd, IDC_LISTBOX);
 
+#ifdef false //Не рабочая сортировка
         if (LOWORD(wParam) == IDC_SORT)
         {
             HWND hsort = GetDlgItem(hwnd, IDC_SORT);
@@ -51,7 +52,9 @@ BOOL CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             else
                 SendMessage(hListBox, LB_SETSEL, (WPARAM)FALSE, (LPARAM)-1);
         }
-        else if (LOWORD(wParam) == IDC_ADD)
+#endif // false
+
+        if (LOWORD(wParam) == IDC_ADD)
         {
             DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DialogProcAdd, 0);
         }
@@ -97,6 +100,7 @@ BOOL CALLBACK DialogProcAdd(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_INITDIALOG:
+        SendMessage(GetDlgItem(hwnd, IDC_EDIT_ADD), WM_SETFOCUS, (WPARAM)GetDlgItem(hwnd, IDOK) , 0);
         break;
     case WM_COMMAND:
     {
@@ -112,9 +116,8 @@ BOOL CALLBACK DialogProcAdd(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             HWND hList = GetDlgItem(hParent, IDC_LISTBOX);
 
 
-            if(sz_buffer[0] == NULL) // Проверка на пустой ввод
-                MessageBox(hwnd, "Строка пустая", "Error", MB_OK | MB_ICONINFORMATION);
-            else if(LB_ERR == SendMessage(hList, LB_FINDSTRINGEXACT, 0, (LPARAM)sz_buffer))// Проверка на уникальность введенного текста
+            if (sz_buffer[0] == NULL)break; // Проверка на пустой ввод
+            else if(LB_ERR == SendMessage(hList, LB_FINDSTRING, 0, (LPARAM)sz_buffer))// Проверка на уникальность введенного текста
                 SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
             else
                 MessageBox(hwnd, "Такая строка существует!", "Error", MB_OK | MB_ICONINFORMATION);
