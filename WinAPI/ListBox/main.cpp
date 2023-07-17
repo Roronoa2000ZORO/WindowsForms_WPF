@@ -2,13 +2,14 @@
 #include <Windows.h>
 #include <cstdio>
 #include"resource.h"
+#include"Winuser.h"
 
 
 BOOL CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK DialogProcAdd(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
 
     //HWND hwnd = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG), NULL, DialogProc);
@@ -25,49 +26,48 @@ BOOL CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_INITDIALOG:
     {
 
-        HWND hwndListBox = GetDlgItem(hwnd, IDC_LISTBOX);
+        HWND hListBox = GetDlgItem(hwnd, IDC_LISTBOX);
 
+        SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"Smit");
+        SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"Jony");
+        SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"Lara");
+        SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"Adam");
 
-        SendMessage(hwndListBox, LB_ADDSTRING, 0, (LPARAM)"Item 1");
-        SendMessage(hwndListBox, LB_ADDSTRING, 0, (LPARAM)"Item 2");
-        SendMessage(hwndListBox, LB_ADDSTRING, 0, (LPARAM)"Item 3");
-
-
-        SendMessage(hwndListBox, LB_SETCURSEL, 0, 0);
+        SendMessage(hListBox, LB_SETCURSEL, 0, 0);
+        SendMessage(hListBox, LBS_SORT, 0, 0);
 
         return TRUE;
     }
     case WM_COMMAND:
     {
-        /*switch (LOWORD(wParam))
-        {
-        case IDC_ADD:
-        {
-            DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDC_ADD), hwnd, (DLGPROC)DialogProcAdd, 0);
-        }
-        break;*/
+        HWND hListBox = GetDlgItem(hwnd, IDC_LISTBOX);
 
-        if (LOWORD(wParam) == IDC_ADD)
+        if (LOWORD(wParam) == IDC_SORT)
+        {
+            HWND hsort = GetDlgItem(hwnd, IDC_SORT);
+
+            if (SendMessage(hsort, BM_GETCHECK, 0, 0) == BST_CHECKED)
+                SendMessage(hListBox, LBS_SORT, 0, 0);
+            else
+                SendMessage(hListBox, LB_SETSEL, (WPARAM)FALSE, (LPARAM)-1);
+        }
+        else if (LOWORD(wParam) == IDC_ADD)
         {
             DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, (DLGPROC)DialogProcAdd, 0);
         }
         else if (LOWORD(wParam) == IDC_DELETE)
         {
-            HWND hList = GetDlgItem(hwnd, IDC_LISTBOX);
-            SendMessage(hList, LB_DELETESTRING, SendMessage(hList, LB_GETCURSEL, 0, 0), 0);
+            SendMessage(hListBox, LB_DELETESTRING, SendMessage(hListBox, LB_GETCURSEL, 0, 0), 0);
         }
         else if (LOWORD(wParam) == IDOK)
         {
 
-            HWND hwndListBox = GetDlgItem(hwnd, IDC_LISTBOX);
-
-
-            INT selectedIndex = SendMessage(hwndListBox, LB_GETCURSEL, 0, 0);
+            INT selectedIndex = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
 
 
             CONST INT SIZE = 256;
             CHAR selectedItemText[SIZE] = {};
-            SendMessage(hwndListBox, LB_GETTEXT, selectedIndex, (LPARAM)selectedItemText);
+            SendMessage(hListBox, LB_GETTEXT, selectedIndex, (LPARAM)selectedItemText);
 
             CHAR sz_message[SIZE] = {};
             sprintf(sz_message, "Selected Item:\nIndex: %d\nValue: %s", selectedIndex, selectedItemText);
@@ -110,7 +110,16 @@ BOOL CALLBACK DialogProcAdd(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             HWND hParent = GetParent(hwnd);
             HWND hList = GetDlgItem(hParent, IDC_LISTBOX);
-            SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
+
+
+            if(sz_buffer[0] == NULL) // Проверка на пустой ввод
+                MessageBox(hwnd, "Строка пустая", "Error", MB_OK | MB_ICONINFORMATION);
+            else if(LB_ERR == SendMessage(hList, LB_FINDSTRINGEXACT, 0, (LPARAM)sz_buffer))// Проверка на уникальность введенного текста
+                SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
+            else
+                MessageBox(hwnd, "Такая строка существует!", "Error", MB_OK | MB_ICONINFORMATION);
+
+            EndDialog(hwnd, 0);
         }
         case IDCANCEL: EndDialog(hwnd, 0);
             break;
