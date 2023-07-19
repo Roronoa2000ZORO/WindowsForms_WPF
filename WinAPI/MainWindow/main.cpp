@@ -51,15 +51,18 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     //2) Создание окна:
     
-    INT newWidth = (INT)GetSystemMetrics(SM_CXSCREEN) * 3 / 4;
-    INT newHeight = (INT)GetSystemMetrics(SM_CYSCREEN) * 3 / 4;
+    INT newWidth = GetSystemMetrics(SM_CXSCREEN) * 3 / 4;
+    INT newHeight = GetSystemMetrics(SM_CYSCREEN) * 3 / 4;
+
+    INT start_x = newWidth / 8;
+    INT start_y = newHeight / 8;
 
     HWND hwnd = CreateWindowEx(
         0,
         g_sz_MY_WINDOW_CLASS,   //Имя класса окна
         g_sz_MY_WINDOW_CLASS,   //Заголовок окна
         WS_OVERLAPPEDWINDOW, //Стиль окна для главного окна программы всегда будет WS_OVERLAPPEDWINDOW - это окно верхнего уровня(TOP_LEVEL_WINDOW), которое включает в себя дочерний ....
-        CW_USEDEFAULT,CW_USEDEFAULT, //Начальная позицция окна
+        start_x, start_y, //Начальная позицция окна
         newWidth, newHeight, //Размер окна
         NULL, //Parent Window
         NULL, //Для главного окна это меню. Для дочернего окна это ID его ресурса (IDC_EDIT)
@@ -99,20 +102,6 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
     case WM_DESTROY: PostQuitMessage(0); break;
     case WM_SIZE:
-    {
-       
-        // Получить новые размеры окна
-        int width = LOWORD(lParam);
-        int height = HIWORD(lParam);
-        CONST INT SIZE = 256;
-        CHAR szTitle[SIZE] = {};
-
-        // Обновить заголовок окна с новыми размерами
-        sprintf(szTitle,  "%s - %dx%d", g_sz_MY_WINDOW_CLASS, width, height);
-        SetWindowText(hwnd, szTitle);
-
-        break;
-    }
     case WM_MOVE:
     {
         // Получить новое положение окна
@@ -124,7 +113,7 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         CONST INT SIZE = 256;
         CHAR szTitle[SIZE] = {};
         GetWindowRect(hwnd, &windowRect);
-        sprintf(szTitle, "%s - %dx%d - x:%d, y:%d", g_sz_MY_WINDOW_CLASS, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, x, y);
+        sprintf(szTitle, "%s, SIZE - %ix%i - x:%i, y:%i", g_sz_MY_WINDOW_CLASS, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, windowRect.left, windowRect.top);
         SetWindowText(hwnd, szTitle);
 
         break;
