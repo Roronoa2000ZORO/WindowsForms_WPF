@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+п»ї#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
 #include<cstdio>
 #include <CommCtrl.h>
@@ -12,7 +12,7 @@ INT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
-    //1) Регистрация класса окна:
+    //1) Р РµРіРёСЃС‚СЂР°С†РёСЏ РєР»Р°СЃСЃР° РѕРєРЅР°:
     WNDCLASSEX wc;
     ZeroMemory(&wc, sizeof(wc));
 
@@ -26,7 +26,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     wc.hIcon = (HICON)LoadImage(hInstance, "palm.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
     wc.hIconSm = (HICON)LoadImage(hInstance, "star.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 
-    wc.hCursor = (HCURSOR)LoadImage(hInstance, "sccpointer.ani", IMAGE_CURSOR, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+    wc.hCursor = LoadIcon(hInstance, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
 
     wc.hInstance = hInstance;
@@ -36,11 +36,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     if (!RegisterClassEx(&wc))
     {
-        MessageBox(NULL, "Класс не зарегистрирован", "Error", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, "РљР»Р°СЃСЃ РЅРµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ", "Error", MB_OK | MB_ICONERROR);
         return 0;
     }
 
-    //2) Создание окна:
+    //2) РЎРѕР·РґР°РЅРёРµ РѕРєРЅР°:
 
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -49,24 +49,24 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     HWND hwnd = CreateWindowEx(
         0,
-        g_sz_MY_WINDOW_CLASS,   //Имя класса окна
-        g_sz_MY_WINDOW_CLASS,   //Заголовок окна
-        WS_OVERLAPPEDWINDOW, //Стиль окна для главного окна программы всегда будет WS_OVERLAPPEDWINDOW - это окно верхнего уровня(TOP_LEVEL_WINDOW), которое включает в себя дочерний ....
-        (screenWidth - newWidth) / 2, (screenHeight - newHeight) / 2, //Центрирование окна на экране
-        newWidth, newHeight, //Размер окна
+        g_sz_MY_WINDOW_CLASS,   //РРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
+        g_sz_MY_WINDOW_CLASS,   //Р—Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°
+        WS_OVERLAPPEDWINDOW, //РЎС‚РёР»СЊ РѕРєРЅР° РґР»СЏ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° РїСЂРѕРіСЂР°РјРјС‹ РІСЃРµРіРґР° Р±СѓРґРµС‚ WS_OVERLAPPEDWINDOW - СЌС‚Рѕ РѕРєРЅРѕ РІРµСЂС…РЅРµРіРѕ СѓСЂРѕРІРЅСЏ(TOP_LEVEL_WINDOW), РєРѕС‚РѕСЂРѕРµ РІРєР»СЋС‡Р°РµС‚ РІ СЃРµР±СЏ РґРѕС‡РµСЂРЅРёР№ ....
+        (screenWidth - newWidth) / 2, (screenHeight - newHeight) / 2, //Р¦РµРЅС‚СЂРёСЂРѕРІР°РЅРёРµ РѕРєРЅР° РЅР° СЌРєСЂР°РЅРµ
+        newWidth, newHeight, //Р Р°Р·РјРµСЂ РѕРєРЅР°
         NULL, //Parent Window
-        NULL, //Для главного окна это меню. Для дочернего окна это ID его ресурса (IDC_EDIT)
+        NULL, //Р”Р»СЏ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° СЌС‚Рѕ РјРµРЅСЋ. Р”Р»СЏ РґРѕС‡РµСЂРЅРµРіРѕ РѕРєРЅР° СЌС‚Рѕ ID РµРіРѕ СЂРµСЃСѓСЂСЃР° (IDC_EDIT)
         hInstance,
         NULL);
 
     if (hwnd == 0)
     {
-        MessageBox(NULL, "Окно не было создано", "Error", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, "РћРєРЅРѕ РЅРµ Р±С‹Р»Рѕ СЃРѕР·РґР°РЅРѕ", "Error", MB_OK | MB_ICONERROR);
         return 0;
     }
 
-    ShowWindow(hwnd, nCmdShow); // Задает режим отображения окна
-    UpdateWindow(hwnd); // Выполняет прорисовку окна
+    ShowWindow(hwnd, nCmdShow); // Р—Р°РґР°РµС‚ СЂРµР¶РёРј РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РѕРєРЅР°
+    UpdateWindow(hwnd); // Р’С‹РїРѕР»РЅСЏРµС‚ РїСЂРѕСЂРёСЃРѕРІРєСѓ РѕРєРЅР°
 
 
     g_hTooltipWnd = CreateWindowEx(
@@ -91,13 +91,13 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         GetClientRect(hwnd, &toolInfo.rect);
         SendMessage(g_hTooltipWnd, TTM_ADDTOOL, 0, (LPARAM)&toolInfo);
     }
-    //3) Запуск цикла сообщений:
+    //3) Р—Р°РїСѓСЃРє С†РёРєР»Р° СЃРѕРѕР±С‰РµРЅРёР№:
 
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0) > 0)
     {
-        TranslateMessage(&msg); // Транслирует сообщения виртуальных клавиш в символьные сообщения
-        DispatchMessage(&msg); // Отправляет сообщение процедуре окна. Сообщение берет от GetMessage();
+        TranslateMessage(&msg); // РўСЂР°РЅСЃР»РёСЂСѓРµС‚ СЃРѕРѕР±С‰РµРЅРёСЏ РІРёСЂС‚СѓР°Р»СЊРЅС‹С… РєР»Р°РІРёС€ РІ СЃРёРјРІРѕР»СЊРЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ
+        DispatchMessage(&msg); // РћС‚РїСЂР°РІР»СЏРµС‚ СЃРѕРѕР±С‰РµРЅРёРµ РїСЂРѕС†РµРґСѓСЂРµ РѕРєРЅР°. РЎРѕРѕР±С‰РµРЅРёРµ Р±РµСЂРµС‚ РѕС‚ GetMessage();
     }
 
     return msg.wParam;
